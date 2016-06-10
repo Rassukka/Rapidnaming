@@ -1,0 +1,17 @@
+@mixin vexer-Rapidnaming {
+
+	/*
+	* Vaadin provides an effective way of importing add-on themes but does not 
+	* provide any automatic name-spacing. You should prefix all your 
+	* rules with Rapidnaming to avoid any conflicts.
+	*/
+
+	.Rapidnaming-answer {
+		color: green;
+	}
+
+	.Rapidnaming-title {
+		font-size: 24px;
+		font-weight: stronger;
+	}
+}
