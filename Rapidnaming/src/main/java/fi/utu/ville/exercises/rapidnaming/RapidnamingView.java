@@ -25,8 +25,6 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	private TextField userAnswer;
 
-	private RapidnamingAnswer correct;
-
 	public RapidnamingView(RapidnamingData data, Localizer localizer) {
 		this.data = data;
 		this.localizer = localizer;
