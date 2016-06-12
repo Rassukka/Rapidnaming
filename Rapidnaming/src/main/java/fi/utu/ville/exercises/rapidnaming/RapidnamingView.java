@@ -85,6 +85,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	public void inside(RapidnamingProblem problem) {
 		userAnswer = new TextField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
+		userAnswer.focus();
 		userAnswer.setCaption("Mikä sana oli?");
 
 		this.addComponents(userAnswer);
@@ -94,18 +95,23 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	@Override
 	public void showSolution(RapidnamingProblem problem) {
-		clearFields();
 		String answer = getSolution(problem);
 		String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
-		Label solution = new Label(capitalized);
 		if (userAnswer.getValue().toLowerCase().equals(answer)) {
-			solution.addStyleName("Rapidnaming-correctAnswer");
-			this.addComponent(new Label("Oikein!"));
-			this.addComponent(solution);
+			userAnswer.setEnabled(false);
+			userAnswer.addStyleName("Rapidnaming-disabled");
+			Label oikein = new Label("Oikein!");
+			oikein.addStyleName("oikein");
+			this.addComponent(oikein);
 		} else {
-			solution.addStyleName("Rapidnaming-incorrectAnswer");
-			this.addComponent(new Label("Väärin, Oikea vastaus oli:"));
-			this.addComponent(solution);
+			userAnswer.setEnabled(false);
+			userAnswer.addStyleName("Rapidnaming-disabled");
+			Label vaarin = new Label("Väärin!");
+			vaarin.addStyleName("vaarin");
+			this.addComponent(vaarin);
+			Label correct = new Label("Oikea vastaus oli: " + capitalized);
+			correct.addStyleName("correctAnswer");
+			this.addComponent(correct);
 		}
 	}
 

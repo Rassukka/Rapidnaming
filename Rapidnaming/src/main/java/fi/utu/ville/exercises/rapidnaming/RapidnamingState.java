@@ -24,28 +24,16 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 	@Override
 	protected RapidnamingProblem createProblem() {
 
-		count++;
-
-		String answer = getSequence()[count];
+		String answer = data.getSequence()[count];
 
 		RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);
 		RapidnamingProblem problem = new RapidnamingProblem(answer);
 		problem.setCorrectAnswer(correctAnswer);
 
+		count++;
+
 		return problem;
 
-	}
-
-	private String[] getSequence() {
-		String[] pairs = data.getWords();
-		int numero = pairs.length;
-		for (int i = 0; i < numero; i++) {
-			int random = i + (int) (Math.random() * (numero - i));
-			String randomElement = pairs[random];
-			pairs[random] = pairs[i];
-			pairs[i] = randomElement;
-		}
-		return pairs;
 	}
 
 }

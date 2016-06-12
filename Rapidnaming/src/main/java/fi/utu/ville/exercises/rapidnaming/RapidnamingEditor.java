@@ -71,7 +71,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 	}
 
 	private String getDefaultWords() {
-		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "macdonald\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann\n" + "davis\n" + "yurem\n" + "jackson\n" + "kelly\n" + "gustavsson\n" + "eileen\n" + "walker\n" + "katelyn\n" + "martin\n" + "israel\n" + "carlsson\n" + "quinn\n" + "hansson\n" + "makena\n" + "smith\n" + "danielle\n" + "watson\n" + "leland\n" + "harris\n" + "gunner\n" + "karlsen\n" + "jamar\n" + "olsson\n" + "lara\n" + "martin\n" + "ann\n" + "andersson\n" + "remington\n" + "andersson\n" + "rene\n" + "carlsson\n" + "elvis\n" + "olsen\n" + "solomon\n" + "jaydan\n" + "jackson\n" + "bernard\n" + "nilsen\n";
+		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "macdonald\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann\n" + "davis\n";
 		return changed;
 	}
 

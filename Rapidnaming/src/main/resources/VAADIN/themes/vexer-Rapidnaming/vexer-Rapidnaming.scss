@@ -14,14 +14,27 @@
 		font-size: 24px;
 		font-weight: stronger;
 	}
-	
-	.Rapidnaming-incorrectAnswer {
+
+	.oikein {
+		font: bold 25px Arial;
+		color: green;
+	}
+
+	.vaarin {
+		font: bold 25px Arial;
 		color: red;
-		margin: 10px;
 	}
 	
-	.Rapidnaming-correctAnswer {
-		color: green;
-		margin: 10px;
+	.correctAnswer {
+		font: bold 16px Arial;
+	}
+	
+	.Rapidnaming-disabled {
+    	border: 1px solid #b6b6b6;
+    	border-top-color: #9d9d9d;
+    	border-bottom-color: #d6d6d6;
+    	border-right-color: #d6d6d6;
+    	color: #464f52;
+    	opacity: 1.0;
 	}
 }

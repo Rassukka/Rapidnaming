@@ -10,12 +10,14 @@ public class RapidnamingData implements ExerciseData {
 	private int[] limits;
 	private int timeShown;
 	private String[] words;
+	private final String[] sequence;
 
 	public RapidnamingData(int questions, int[] limits, int timeShown, String[] words) {
 		this.numberOfQuestions = questions;
 		this.limits = limits;
 		this.timeShown = timeShown;
 		this.words = words;
+		this.sequence = getSequence(words);
 	}
 
 	public int getAmount() {
@@ -44,6 +46,21 @@ public class RapidnamingData implements ExerciseData {
 
 	public void setWords(String[] words) {
 		this.words = words;
+	}
+
+	private final String[] getSequence(String[] words) {
+		int numero = words.length;
+		for (int i = 0; i < numero; i++) {
+			int random = i + (int) (Math.random() * (numero - i));
+			String randomElement = words[random];
+			words[random] = words[i];
+			words[i] = randomElement;
+		}
+		return words;
+	}
+
+	public final String[] getSequence() {
+		return sequence;
 	}
 
 }
