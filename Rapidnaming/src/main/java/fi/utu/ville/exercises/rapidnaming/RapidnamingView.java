@@ -98,10 +98,19 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	@Override
 	public void showSolution(RapidnamingProblem problem) {
+		this.removeAllComponents();
 		String answer = getSolution(problem);
 		String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
 		Label solution = new Label(capitalized);
-		this.addComponent(solution);
+		if (userAnswer.getValue().toLowerCase().equals(answer)) {
+			solution.addStyleName("Rapidnaming-correctAnswer");
+			this.addComponent(new Label("Oikein!"));
+			this.addComponent(solution);
+		} else {
+			solution.addStyleName("Rapidnaming-incorrectAnswer");
+			this.addComponent(new Label("Väärin, Oikea vastaus oli:"));
+			this.addComponent(solution);
+		}
 	}
 
 	public String getSolution(RapidnamingProblem problem) {

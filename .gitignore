@@ -9,3 +9,4 @@ target/
 # ignore VAADIN-widgetsets (auto-generated but placed 
 #  in src-side of maven)
 **/VAADIN/widgetsets
+\Rapidnaming-stub\target\tmp\gwt-unitCache/
