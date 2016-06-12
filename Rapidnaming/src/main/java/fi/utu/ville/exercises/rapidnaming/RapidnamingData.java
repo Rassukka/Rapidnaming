@@ -8,10 +8,14 @@ public class RapidnamingData implements ExerciseData {
 
 	private int numberOfQuestions;
 	private int[] limits;
+	private int timeShown;
+	private String[] words;
 
-	public RapidnamingData(int questions, int[] limits) {
+	public RapidnamingData(int questions, int[] limits, int timeShown, String[] words) {
 		this.numberOfQuestions = questions;
 		this.limits = limits;
+		this.timeShown = timeShown;
+		this.words = words;
 	}
 
 	public int getAmount() {
@@ -25,4 +29,21 @@ public class RapidnamingData implements ExerciseData {
 	public boolean giveAnswersAlwaysAsNegative() {
 		return false;
 	}
+
+	public int getTimeShown() {
+		return timeShown;
+	}
+
+	public void setTimeShown(int timeShown) {
+		this.timeShown = timeShown;
+	}
+
+	public String[] getWords() {
+		return words;
+	}
+
+	public void setWords(String[] words) {
+		this.words = words;
+	}
+
 }

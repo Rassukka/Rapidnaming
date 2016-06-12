@@ -9,6 +9,8 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 
 	private RapidnamingData data;
 
+	private int count = 0;
+
 	public RapidnamingState(RapidnamingData data, Localizer localizer) {
 		super(data, localizer);
 	}
@@ -22,16 +24,9 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 	@Override
 	protected RapidnamingProblem createProblem() {
 
-		// int[] numbers = new int[] { generator.nextInt(data.getLimit(1)), generator.nextInt(data.getLimit(2)) };
-		// int answer = numbers[0] + numbers[1];
-		//
-		// if (data.giveAnswersAlwaysAsNegative()) {
-		// answer = -Math.abs(answer);
-		// }
+		count++;
 
-		RapidnamingRandom r = new RapidnamingRandom();
-
-		String answer = r.getSequence()[r.getRandomNum()];
+		String answer = getSequence()[count];
 
 		RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);
 		RapidnamingProblem problem = new RapidnamingProblem(answer);
@@ -39,6 +34,18 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 
 		return problem;
 
+	}
+
+	private String[] getSequence() {
+		String[] pairs = data.getWords();
+		int numero = pairs.length;
+		for (int i = 0; i < numero; i++) {
+			int random = i + (int) (Math.random() * (numero - i));
+			String randomElement = pairs[random];
+			pairs[random] = pairs[i];
+			pairs[i] = randomElement;
+		}
+		return pairs;
 	}
 
 }

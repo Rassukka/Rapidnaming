@@ -59,9 +59,9 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 		this.localizer = getLocalizer();
 
 		if (oldData == null) {
-			RapidnamingData easy = new RapidnamingData(5, new int[] { 5, 5 });
-			RapidnamingData normal = new RapidnamingData(10, new int[] { 10, 10 });
-			RapidnamingData hard = new RapidnamingData(15, new int[] { 15, 15 });
+			RapidnamingData easy = new RapidnamingData(5, new int[] { 5, 5 }, 1500, getDefaultWords());
+			RapidnamingData normal = new RapidnamingData(10, new int[] { 10, 10 }, 1500, getDefaultWords());
+			RapidnamingData hard = new RapidnamingData(15, new int[] { 15, 15 }, 1500, getDefaultWords());
 
 			this.easyEditor = new RapidnamingEditor(easy, getLocalizer());
 			this.normalEditor = new RapidnamingEditor(normal, getLocalizer());
@@ -91,6 +91,11 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 	@Override
 	public String getViewName() {
 		return "RapidnamingEditor";
+	}
+
+	private String[] getDefaultWords() {
+		String[] words = new String[] { "gabrielle", "patel", "brian", "robinson", "eduardo", "haugen", "hoen", "johansen", "alejandro", "macdonald", "angel", "karlsson", "yahir", "gustavsson", "haiden", "svensson", "emily", "stewart", "corinne", "davis", "ryann", "davis", "yurem", "jackson", "kelly", "gustavsson", "eileen", "walker", "katelyn", "martin", "israel", "carlsson", "quinn", "hansson", "makena", "smith", "danielle", "watson", "leland", "harris", "gunner", "karlsen", "jamar", "olsson", "lara", "martin", "ann", "andersson", "remington", "andersson", "rene", "carlsson", "elvis", "olsen", "solomon", "jaydan", "jackson", "bernard", "nilsen" };
+		return words;
 	}
 
 }

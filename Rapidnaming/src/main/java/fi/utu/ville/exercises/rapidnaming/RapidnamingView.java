@@ -27,10 +27,8 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	private RapidnamingAnswer correct;
 
-	private int TimeShown = 1001;
-
 	public RapidnamingView(RapidnamingData data, Localizer localizer) {
-		this.data = data == null ? new RapidnamingData(5, new int[] { 5, 5 }) : data;
+		this.data = data;
 		this.localizer = localizer;
 
 	}
@@ -68,7 +66,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	public void showPicture(RapidnamingProblem problem) {
 		CountdownClock clock = new CountdownClock();
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MILLISECOND, TimeShown);
+		c.add(Calendar.MILLISECOND, data.getTimeShown());
 		clock.setDate(c.getTime());
 
 		String answer = getSolution(problem);
@@ -98,7 +96,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	@Override
 	public void showSolution(RapidnamingProblem problem) {
-		this.removeAllComponents();
+		clearFields();
 		String answer = getSolution(problem);
 		String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
 		Label solution = new Label(capitalized);
