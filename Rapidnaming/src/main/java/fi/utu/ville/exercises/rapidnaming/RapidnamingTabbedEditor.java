@@ -94,7 +94,7 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 	}
 
 	private String[] getDefaultWords() {
-		String[] words = new String[] { "gabrielle", "patel", "brian", "robinson", "eduardo", "haugen", "hoen", "johansen", "alejandro", "macdonald", "angel", "karlsson", "yahir", "gustavsson", "haiden", "svensson", "emily", "stewart", "corinne", "davis", "ryann", "davis" };
+		String[] words = new String[] { "gabrielle", "patel", "brian", "robinson", "eduardo", "haugen", "hoen", "johansen", "alejandro", "angel", "karlsson", "yahir", "gustavsson", "haiden", "svensson", "emily", "stewart", "corinne", "davis", "ryann" };
 		return words;
 	}
 

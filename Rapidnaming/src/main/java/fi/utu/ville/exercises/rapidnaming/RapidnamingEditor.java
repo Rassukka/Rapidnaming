@@ -1,7 +1,11 @@
 package fi.utu.ville.exercises.rapidnaming;
 
+import org.vaadin.hene.expandingtextarea.ExpandingTextArea;
+import org.vaadin.hene.expandingtextarea.ExpandingTextArea.RowsChangeEvent;
+import org.vaadin.hene.expandingtextarea.ExpandingTextArea.RowsChangeListener;
+
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
 import edu.vserver.math.MathTabbedEditorWrap;
@@ -17,7 +21,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	private IntegerField timeShown;
 
-	private TextArea words;
+	private ExpandingTextArea words;
 
 	final RapidnamingData oldData;
 
@@ -41,10 +45,18 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		timeShown.setValue(1500);
 		timeShown.setWidth("40px");
 
-		words = new TextArea("Sanat joita kysytään: (allekkain)");
+		words = new ExpandingTextArea("Sanat joita kysytään: (allekkain, pienellä!)");
 		words.setValue(getDefaultWords());
-
-		view.addComponents(numberOfExercises, timeShown, words);
+		words.setImmediate(true);
+		words.setMaxRows(21);
+		final Label sanoja = new Label("" + words.getRows());
+		sanoja.setCaption("Sanoja");
+		view.addComponents(numberOfExercises, timeShown, words, sanoja);
+		words.addRowsChangeListener(new RowsChangeListener() {
+			public void rowsChange(RowsChangeEvent event) {
+				sanoja.setValue("" + (event.getRows() - 1));
+			}
+		});
 
 		return view;
 
@@ -71,7 +83,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 	}
 
 	private String getDefaultWords() {
-		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "macdonald\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann\n" + "davis\n";
+		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann\n";
 		return changed;
 	}
 
