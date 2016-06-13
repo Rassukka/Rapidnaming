@@ -48,7 +48,8 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		words = new ExpandingTextArea("Sanat joita kysytään: (allekkain, pienellä!)");
 		words.setValue(getDefaultWords());
 		words.setImmediate(true);
-		words.setMaxRows(21);
+		// words.setMaxRows(21); Jos ottaa kommentin pois niin todennäköisesti näyttää paremmalta kun ei laajene enempää kuin 20 sanaa
+		// mutta ei myöskään laske sanoja jotka menevät kahdenkympin yli :/
 		final Label sanoja = new Label("" + words.getRows());
 		sanoja.setCaption("Sanoja");
 		view.addComponents(numberOfExercises, timeShown, words, sanoja);
@@ -83,7 +84,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 	}
 
 	private String getDefaultWords() {
-		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann\n";
+		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann";
 		return changed;
 	}
 
