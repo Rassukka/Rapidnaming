@@ -48,7 +48,7 @@ public class RapidnamingData implements ExerciseData {
 		this.words = words;
 	}
 
-	private final String[] getSequence(String[] words) {
+	private String[] getSequence(String[] words) {
 		int numero = words.length;
 		for (int i = 0; i < numero; i++) {
 			int random = i + (int) (Math.random() * (numero - i));
@@ -59,7 +59,7 @@ public class RapidnamingData implements ExerciseData {
 		return words;
 	}
 
-	public final String[] getSequence() {
+	public String[] getSequence() {
 		return sequence;
 	}
 
