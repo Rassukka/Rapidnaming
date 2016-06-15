@@ -59,6 +59,8 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 		this.localizer = getLocalizer();
 
 		if (oldData == null) {
+
+			// Melko varma ettei tämä toimi niin kun sen pitäisi.
 			RapidnamingData easy = new RapidnamingData(5, new int[] { 5, 5 }, 1500, getDefaultWords());
 			RapidnamingData normal = new RapidnamingData(10, new int[] { 10, 10 }, 1500, getDefaultWords());
 			RapidnamingData hard = new RapidnamingData(15, new int[] { 15, 15 }, 1500, getDefaultWords());

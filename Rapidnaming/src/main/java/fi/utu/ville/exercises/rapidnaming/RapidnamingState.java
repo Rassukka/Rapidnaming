@@ -24,7 +24,10 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 	@Override
 	protected RapidnamingProblem createProblem() {
 
-		// ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa hyppimää edes takaisin?
+		/*
+		 * ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa
+		 * hyppimään edes takaisin?
+		 */
 		String answer = data.getSequence()[count];
 		count++;
 

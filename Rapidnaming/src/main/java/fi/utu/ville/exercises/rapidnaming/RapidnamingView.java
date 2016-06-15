@@ -36,6 +36,10 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		this.clearFields();
 		this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
+		/*
+		 * Jos tässävaiheessa painaa enteriä niin koko tehtävä menee sekaisin, en saanut laitettua
+		 * "button" elementtiin shortcuttia, enkä sitä pois tehtävän seuraava kysymys painikkeesta.
+		 */
 		Button button = new Button("Aloita tehtävä");
 		button.addClickListener(e -> {
 			this.removeComponent(button);
@@ -62,6 +66,14 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	}
 
 	public void showPicture(RapidnamingProblem problem) {
+
+		/*
+		 * countdownclock ei tarpeeksi nopea, jos aika on alle sekunnin, niin kuva ei näy melkein
+		 * ollenkaan, mutta jos aika on yli sekunnin - alle kaksi sekuntia, kuvan näyttöaika ei
+		 * muutu. Melko heppo tehtävä jopa näillä englanninkielisillä sanoilla jopa 9 vuotiaalle
+		 * pikkuveljelle.
+		 */
+
 		CountdownClock clock = new CountdownClock();
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MILLISECOND, data.getTimeShown());
