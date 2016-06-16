@@ -28,7 +28,19 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 		 * ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa
 		 * hyppimään edes takaisin?
 		 */
-		String answer = data.getSequence()[count];
+		String answer = data.getWords()[count];
+		if (data.getWords().length < count) {
+			count = 0;
+		}
+
+		for (String s : data.getWords()) {
+			System.out.print(s + " ");
+		}
+
+		System.out.println(count);
+		System.out.println("");
+		System.out.println("");
+
 		count++;
 
 		RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);

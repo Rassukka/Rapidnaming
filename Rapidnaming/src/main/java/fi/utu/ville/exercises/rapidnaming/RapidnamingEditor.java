@@ -9,6 +9,7 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.VerticalLayout;
 
 import edu.vserver.math.MathTabbedEditorWrap;
+import eu.michaelvogt.vaadin.attribute.Attribute;
 import fi.utu.ville.standardutils.Localizer;
 import fi.utu.ville.standardutils.ui.IntegerField;
 
@@ -45,15 +46,20 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		timeShown.setValue(1500);
 		timeShown.setWidth("40px");
 
-		// Browserin spellchecking melko ärsyttävä, mutta en löytänyt hyvää tapaa poistaa sitä.
 		words = new ExpandingTextArea("Sanat joita kysytään: (allekkain, pienellä!)");
 		words.setValue(getDefaultWords());
 		words.setImmediate(true);
 		/*
 		 * words.setMaxRows(21); Jos ottaa kommentin pois niin todennäköisesti näyttää paremmalta
 		 * kun ei laajene enempää kuin 20 sanaa mutta ei myöskään laske sanoja jotka menevät
-		 * kahdenkympin yli :/
+		 * kahdenkympin yli :/ SetHeight ei toimi ExpandingTextArean kanssa, mutta jos siitä tekee
+		 * pelkän TextArean ei pysty laskemaan sanojakaan näin hyvin, ainakaan kirjottamatta omaa
+		 * koodinpätkää siihen
 		 */
+
+		Attribute attribute = new Attribute("spellcheck", "false");
+		attribute.extend(words);
+
 		final Label sanoja = new Label("" + words.getRows());
 		sanoja.setCaption("Sanoja");
 		view.addComponents(numberOfExercises, timeShown, words, sanoja);

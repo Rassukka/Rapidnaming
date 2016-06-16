@@ -38,4 +38,6 @@
     <inherits name="org.vaadin.kim.countdownclock.CountdownClockWidgetset" />
 
     <inherits name="org.vaadin.hene.expandingtextarea.widgetset.ExpandingtextareaWidgetset" />
+
+    <inherits name="eu.michaelvogt.vaadin.attribute.AttributeWidgetset" />
 </module>
