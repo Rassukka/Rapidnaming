@@ -6,6 +6,7 @@ import org.vaadin.hene.expandingtextarea.ExpandingTextArea.RowsChangeListener;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 
 import edu.vserver.math.MathTabbedEditorWrap;
@@ -17,6 +18,8 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	private static final long serialVersionUID = 1L;
 
+	private OptionGroup valinta;
+
 	// How many questions are shown to the user. Mathlayout can show max 20.
 	private IntegerField numberOfExercises;
 
@@ -26,17 +29,26 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	final RapidnamingData oldData;
 
+	private VerticalLayout view;
+
+	private Mode mode;
+
 	private final Localizer localizer;
 
-	public RapidnamingEditor(RapidnamingData oldData, Localizer localizer) {
+	public RapidnamingEditor(RapidnamingData oldData, Localizer localizer, VerticalLayout view) {
 		this.localizer = localizer;
 		this.oldData = oldData;
+		this.view = new VerticalLayout();
 	}
 
 	@Override
 	public VerticalLayout drawSettings() {
 
-		VerticalLayout view = new VerticalLayout();
+		valinta = new OptionGroup("Sanat vai Kuvat?");
+		valinta.addItems("Sanat", "Kuvat");
+		valinta.select("Sanat");
+
+		view.addComponent(valinta);
 
 		numberOfExercises = new IntegerField("Kysymysten määrä: (max 20)", 20);
 		numberOfExercises.setValue(5);
@@ -49,13 +61,6 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		words = new ExpandingTextArea("Sanat joita kysytään: (allekkain, pienellä!)");
 		words.setValue(getDefaultWords());
 		words.setImmediate(true);
-		/*
-		 * words.setMaxRows(21); Jos ottaa kommentin pois niin todennäköisesti näyttää paremmalta
-		 * kun ei laajene enempää kuin 20 sanaa mutta ei myöskään laske sanoja jotka menevät
-		 * kahdenkympin yli :/ SetHeight ei toimi ExpandingTextArean kanssa, mutta jos siitä tekee
-		 * pelkän TextArean ei pysty laskemaan sanojakaan näin hyvin, ainakaan kirjottamatta omaa
-		 * koodinpätkää siihen
-		 */
 
 		Attribute attribute = new Attribute("spellcheck", "false");
 		attribute.extend(words);
@@ -69,13 +74,34 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 			}
 		});
 
+		valinta.addValueChangeListener(event -> {
+			if (valinta.getValue().equals("Sanat")) {
+				mode = Mode.WORDS;
+				view.removeAllComponents();
+				view.addComponents(valinta, numberOfExercises, timeShown, words, sanoja);
+			} else if (valinta.getValue().equals("Kuvat")) {
+				mode = Mode.PICTURES;
+				view.removeAllComponents();
+				view.addComponents(valinta, numberOfExercises, timeShown);
+			}
+
+		});
+
 		return view;
 
 	}
 
 	@Override
 	public RapidnamingData getCurrData() {
-		return new RapidnamingData(numberOfExercises.getInteger(), new int[] { 5, 5 }, timeShown.getInteger(), words.getValue().split("\n"));
+		switch (mode) {
+		case WORDS:
+			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), Mode.WORDS);
+		case PICTURES:
+			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), Mode.PICTURES);
+		default:
+			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), Mode.WORDS);
+		}
+
 	}
 
 	@Override

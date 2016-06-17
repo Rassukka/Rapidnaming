@@ -61,17 +61,17 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 		if (oldData == null) {
 
 			// Melko varma ettei tämä toimi niin kun sen pitäisi.
-			RapidnamingData easy = new RapidnamingData(5, new int[] { 5, 5 }, 1500, getDefaultWords());
-			RapidnamingData normal = new RapidnamingData(10, new int[] { 10, 10 }, 1500, getDefaultWords());
-			RapidnamingData hard = new RapidnamingData(15, new int[] { 15, 15 }, 1500, getDefaultWords());
+			RapidnamingData easy = new RapidnamingData(5, 1500, getDefaultWords(), Mode.WORDS);
+			RapidnamingData normal = new RapidnamingData(10, 1500, getDefaultWords(), Mode.WORDS);
+			RapidnamingData hard = new RapidnamingData(15, 1500, getDefaultWords(), Mode.WORDS);
 
-			this.easyEditor = new RapidnamingEditor(easy, getLocalizer());
-			this.normalEditor = new RapidnamingEditor(normal, getLocalizer());
-			this.hardEditor = new RapidnamingEditor(hard, getLocalizer());
+			this.easyEditor = new RapidnamingEditor(easy, getLocalizer(), new VerticalLayout());
+			this.normalEditor = new RapidnamingEditor(normal, getLocalizer(), new VerticalLayout());
+			this.hardEditor = new RapidnamingEditor(hard, getLocalizer(), new VerticalLayout());
 		} else {
-			this.easyEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.EASY), getLocalizer());
-			this.normalEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.NORMAL), getLocalizer());
-			this.hardEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.HARD), getLocalizer());
+			this.easyEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.EASY), getLocalizer(), new VerticalLayout());
+			this.normalEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.NORMAL), getLocalizer(), new VerticalLayout());
+			this.hardEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.HARD), getLocalizer(), new VerticalLayout());
 		}
 
 		help = localizer.getUIText(UIConstants.HELP_CALCROW);
