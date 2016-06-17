@@ -35,10 +35,11 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	private final Localizer localizer;
 
-	public RapidnamingEditor(RapidnamingData oldData, Localizer localizer, VerticalLayout view) {
+	public RapidnamingEditor(RapidnamingData oldData, Localizer localizer, VerticalLayout view, Mode mode) {
 		this.localizer = localizer;
 		this.oldData = oldData;
 		this.view = new VerticalLayout();
+		this.mode = mode;
 	}
 
 	@Override

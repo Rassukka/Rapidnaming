@@ -60,18 +60,19 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 
 		if (oldData == null) {
 
-			// Melko varma ettei tämä toimi niin kun sen pitäisi.
+			// Melko varma ettei tämä toimi niin kun sen pitäisi. default words syy miksi sanat
+			// hyppii???
 			RapidnamingData easy = new RapidnamingData(5, 1500, getDefaultWords(), Mode.WORDS);
 			RapidnamingData normal = new RapidnamingData(10, 1500, getDefaultWords(), Mode.WORDS);
 			RapidnamingData hard = new RapidnamingData(15, 1500, getDefaultWords(), Mode.WORDS);
 
-			this.easyEditor = new RapidnamingEditor(easy, getLocalizer(), new VerticalLayout());
-			this.normalEditor = new RapidnamingEditor(normal, getLocalizer(), new VerticalLayout());
-			this.hardEditor = new RapidnamingEditor(hard, getLocalizer(), new VerticalLayout());
+			this.easyEditor = new RapidnamingEditor(easy, getLocalizer(), new VerticalLayout(), Mode.WORDS);
+			this.normalEditor = new RapidnamingEditor(normal, getLocalizer(), new VerticalLayout(), Mode.WORDS);
+			this.hardEditor = new RapidnamingEditor(hard, getLocalizer(), new VerticalLayout(), Mode.WORDS);
 		} else {
-			this.easyEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.EASY), getLocalizer(), new VerticalLayout());
-			this.normalEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.NORMAL), getLocalizer(), new VerticalLayout());
-			this.hardEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.HARD), getLocalizer(), new VerticalLayout());
+			this.easyEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.EASY), getLocalizer(), new VerticalLayout(), Mode.WORDS);
+			this.normalEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.NORMAL), getLocalizer(), new VerticalLayout(), Mode.WORDS);
+			this.hardEditor = new RapidnamingEditor(oldData.getForLevel(DiffLevel.HARD), getLocalizer(), new VerticalLayout(), Mode.WORDS);
 		}
 
 		help = localizer.getUIText(UIConstants.HELP_CALCROW);
