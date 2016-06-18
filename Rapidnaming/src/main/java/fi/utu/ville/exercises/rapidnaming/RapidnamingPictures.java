@@ -4,23 +4,20 @@ import java.io.File;
 
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Image;
 
 public class RapidnamingPictures {
 
 	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 
-	private FileResource filename;
+	private int pictureNumber;
 
-	public RapidnamingPictures(String filename) {
-		this.setFilename(new FileResource(new File(basepath + "/WEB-INF/images/" + filename)));
+	public RapidnamingPictures(int pictureNumber) {
+		this.pictureNumber = pictureNumber;
 	}
 
-	public FileResource getFilename() {
-		return filename;
-	}
-
-	public void setFilename(FileResource filename) {
-		this.filename = filename;
+	public Image getImage() {
+		return new Image("", new FileResource(new File(basepath + "/WEB-INF/images/kuva" + pictureNumber + ".png")));
 	}
 
 }

@@ -84,6 +84,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 				mode = Mode.PICTURES;
 				view.removeAllComponents();
 				view.addComponents(valinta, numberOfExercises, timeShown);
+
 			}
 
 		});
@@ -100,6 +101,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		case PICTURES:
 			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), Mode.PICTURES);
 		default:
+			// jotain muuta tänne?
 			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), Mode.WORDS);
 		}
 

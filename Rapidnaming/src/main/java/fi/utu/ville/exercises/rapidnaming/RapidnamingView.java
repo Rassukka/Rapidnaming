@@ -15,6 +15,7 @@ import edu.vserver.exercises.math.essentials.layout.AbstractMathAnswer;
 import edu.vserver.exercises.math.essentials.layout.MathExerciseView;
 import edu.vserver.exercises.math.essentials.layout.MathLayoutController;
 import fi.utu.ville.standardutils.Localizer;
+import fi.utu.ville.standardutils.ui.IntegerField;
 
 public class RapidnamingView extends VerticalLayout implements MathExerciseView<RapidnamingProblem> {
 
@@ -24,6 +25,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	private final Localizer localizer;
 
 	private TextField userAnswer;
+	private IntegerField intAnswer;
 
 	public RapidnamingView(RapidnamingData data, Localizer localizer) {
 		this.data = data;
@@ -40,32 +42,61 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		 * Jos tässävaiheessa painaa enteriä niin koko tehtävä menee sekaisin, en saanut laitettua
 		 * "button" elementtiin shortcuttia, enkä sitä pois tehtävän seuraava kysymys painikkeesta.
 		 */
-		Button button = new Button("Aloita tehtävä");
-		button.addClickListener(e -> {
-			this.removeComponent(button);
-			CountdownClock clock = new CountdownClock();
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.SECOND, 4);
-			clock.setDate(c.getTime());
-			clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Sana näytetään %s sekunnin kuluttua." + "</span>");
-			clock.addEndEventListener(new EndEventListener() {
-				public void countDownEnded(CountdownClock clock) {
-					clearFields();
-					showPicture(problem);
-				}
+
+		if (data.getMode() == Mode.WORDS) {
+
+			Button button = new Button("Aloita tehtävä");
+			button.addClickListener(e -> {
+				this.removeComponent(button);
+				CountdownClock clock = new CountdownClock();
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.SECOND, 4);
+				clock.setDate(c.getTime());
+				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Sana näytetään %s sekunnin kuluttua." + "</span>");
+				clock.addEndEventListener(new EndEventListener() {
+					public void countDownEnded(CountdownClock clock) {
+						clearFields();
+						showWord(problem);
+					}
+				});
+
+				this.addComponent(clock);
+				this.setMargin(true);
+				this.setSpacing(true);
 			});
 
-			this.addComponent(clock);
+			this.addComponents(button);
 			this.setMargin(true);
 			this.setSpacing(true);
-		});
 
-		this.addComponent(button);
-		this.setMargin(true);
-		this.setSpacing(true);
+		} else {
+			Button button = new Button("Aloita tehtävä");
+			button.addClickListener(e -> {
+				this.removeComponent(button);
+				CountdownClock clock = new CountdownClock();
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.SECOND, 4);
+				clock.setDate(c.getTime());
+				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Kuva näytetään %s sekunnin kuluttua." + "</span>");
+				clock.addEndEventListener(new EndEventListener() {
+					public void countDownEnded(CountdownClock clock) {
+						clearFields();
+						showImage(problem);
+					}
+				});
+
+				this.addComponent(clock);
+				this.setMargin(true);
+				this.setSpacing(true);
+			});
+
+			this.addComponents(button);
+			this.setMargin(true);
+			this.setSpacing(true);
+		}
 	}
 
-	public void showPicture(RapidnamingProblem problem) {
+	public void showWord(RapidnamingProblem problem) {
 
 		/*
 		 * countdownclock ei tarpeeksi nopea, jos aika on alle sekunnin, niin kuva ei näy melkein
@@ -86,7 +117,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		clock.addEndEventListener(new EndEventListener() {
 			public void countDownEnded(CountdownClock clock) {
 				clearFields();
-				inside(problem);
+				wordGuestion(problem);
 			}
 		});
 
@@ -95,7 +126,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		this.setSpacing(true);
 	}
 
-	public void inside(RapidnamingProblem problem) {
+	public void wordGuestion(RapidnamingProblem problem) {
 		userAnswer = new TextField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
 		userAnswer.focus();
 		userAnswer.setCaption("Mikä sana oli?");
@@ -105,25 +136,91 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		this.setSpacing(true);
 	}
 
+	public void showImage(RapidnamingProblem problem) {
+
+		/*
+		 * countdownclock ei tarpeeksi nopea, jos aika on alle sekunnin, niin kuva ei näy melkein
+		 * ollenkaan, mutta jos aika on yli sekunnin - alle kaksi sekuntia, kuvan näyttöaika ei
+		 * muutu. Melko heppo tehtävä jopa näillä englanninkielisillä sanoilla jopa 9 vuotiaalle
+		 * pikkuveljelle.
+		 */
+
+		CountdownClock clock = new CountdownClock();
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MILLISECOND, data.getTimeShown());
+		clock.setDate(c.getTime());
+
+		this.addComponent(problem.getPicture());
+
+		clock.addEndEventListener(new EndEventListener() {
+			public void countDownEnded(CountdownClock clock) {
+				clearFields();
+				wordGuestion(problem);
+			}
+		});
+
+		// turhaa?
+		this.addComponent(clock);
+		this.setMargin(true);
+		this.setSpacing(true);
+	}
+
+	public void imageGuestion(RapidnamingProblem problem) {
+		intAnswer = new IntegerField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
+		intAnswer.focus();
+		if (problem.getColor().equals("green")) {
+			intAnswer.setCaption("Kuinka monta vihreää palloa?"); // ympyrää?
+		} else {
+			intAnswer.setCaption("Kuinka monta punaista palloa?"); // vihreä ja punainen
+																	// värikoodattuna?
+		}
+
+		this.addComponents(intAnswer);
+		this.setMargin(true);
+		this.setSpacing(true);
+	}
+
 	@Override
 	public void showSolution(RapidnamingProblem problem) {
-		String answer = getSolution(problem);
-		String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
-		if (userAnswer.getValue().toLowerCase().equals(answer)) {
-			userAnswer.setEnabled(false);
-			userAnswer.addStyleName("Rapidnaming-disabled");
-			Label oikein = new Label("Oikein!");
-			oikein.addStyleName("oikein");
-			this.addComponent(oikein);
+
+		if (data.getMode() == Mode.WORDS) {
+
+			String answer = getSolution(problem);
+			String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
+			if (userAnswer.getValue().toLowerCase().equals(answer)) {
+				userAnswer.setEnabled(false);
+				userAnswer.addStyleName("Rapidnaming-disabled");
+				Label oikein = new Label("Oikein!");
+				oikein.addStyleName("oikein");
+				this.addComponent(oikein);
+			} else {
+				userAnswer.setEnabled(false);
+				userAnswer.addStyleName("Rapidnaming-disabled");
+				Label vaarin = new Label("Väärin!");
+				vaarin.addStyleName("vaarin");
+				this.addComponent(vaarin);
+				Label correct = new Label("Oikea vastaus oli: " + capitalized);
+				correct.addStyleName("correctAnswer");
+				this.addComponent(correct);
+			}
 		} else {
-			userAnswer.setEnabled(false);
-			userAnswer.addStyleName("Rapidnaming-disabled");
-			Label vaarin = new Label("Väärin!");
-			vaarin.addStyleName("vaarin");
-			this.addComponent(vaarin);
-			Label correct = new Label("Oikea vastaus oli: " + capitalized);
-			correct.addStyleName("correctAnswer");
-			this.addComponent(correct);
+			String answer = getSolution(problem);
+			if (intAnswer.getValue().equals(answer)) {
+				intAnswer.setEnabled(false);
+				intAnswer.addStyleName("Rapidnaming-disabled");
+				Label oikein = new Label("Oikein!");
+				oikein.addStyleName("oikein");
+				this.addComponent(oikein);
+			} else {
+				intAnswer.setEnabled(false);
+				intAnswer.addStyleName("Rapidnaming-disabled");
+				Label vaarin = new Label("Väärin!");
+				vaarin.addStyleName("vaarin");
+				this.addComponent(vaarin);
+				Label correct = new Label("Oikea vastaus oli: " + answer);
+				correct.addStyleName("correctAnswer");
+				this.addComponent(correct);
+			}
 		}
 	}
 

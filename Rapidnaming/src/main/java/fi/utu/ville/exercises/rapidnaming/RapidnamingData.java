@@ -1,5 +1,7 @@
 package fi.utu.ville.exercises.rapidnaming;
 
+import java.util.ArrayList;
+
 import fi.utu.ville.exercises.model.ExerciseData;
 
 public class RapidnamingData implements ExerciseData {
@@ -8,9 +10,12 @@ public class RapidnamingData implements ExerciseData {
 
 	private int numberOfQuestions;
 	private int timeShown;
-	private String[] words;
-	private final String[] sequence;
 	private Mode mode;
+
+	private String[] words;
+	private String[] sequence;
+
+	private ArrayList<RapidnamingDatahelp> pictures;
 
 	// sanoille
 	public RapidnamingData(int questions, int timeShown, String[] words, Mode mode) {
@@ -25,8 +30,8 @@ public class RapidnamingData implements ExerciseData {
 	public RapidnamingData(int questions, int timeShown, Mode mode) {
 		this.numberOfQuestions = questions;
 		this.timeShown = timeShown;
-		this.sequence = getSequence(words);
 		this.mode = mode;
+		this.pictures = getPictures();
 	}
 
 	public int getAmount() {
@@ -74,6 +79,18 @@ public class RapidnamingData implements ExerciseData {
 
 	public void setMode(Mode mode) {
 		this.mode = mode;
+	}
+
+	public ArrayList<RapidnamingDatahelp> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(ArrayList<RapidnamingDatahelp> pictures) {
+		pictures.add(new RapidnamingDatahelp(1, 3, 4));
+		pictures.add(new RapidnamingDatahelp(2, 2, 3));
+		pictures.add(new RapidnamingDatahelp(3, 5, 3));
+		pictures.add(new RapidnamingDatahelp(4, 4, 6));
+		pictures.add(new RapidnamingDatahelp(5, 6, 4));
 	}
 
 }

@@ -1,5 +1,7 @@
 package fi.utu.ville.exercises.rapidnaming;
 
+import java.util.Random;
+
 import edu.vserver.exercises.math.essentials.layout.AbstractMathState;
 import fi.utu.ville.standardutils.Localizer;
 
@@ -24,32 +26,64 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 	@Override
 	protected RapidnamingProblem createProblem() {
 
-		/*
-		 * ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa
-		 * hyppimään edes takaisin?
-		 */
+		if (data.getMode() == Mode.WORDS) {
+			/*
+			 * ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa
+			 * hyppimään edes takaisin?
+			 */
 
-		if (data.getSequence().length < count) {
-			count = 0;
+			if (data.getSequence().length < count) {
+				count = 0;
+			}
+
+			for (String s : data.getSequence()) {
+				System.out.print(s + " ");
+			}
+
+			System.out.println(count);
+			System.out.println("");
+			System.out.println("");
+
+			String answer = data.getSequence()[count];
+
+			count++;
+
+			RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);
+			RapidnamingProblem problem = new RapidnamingProblem(answer);
+			problem.setCorrectAnswer(correctAnswer);
+
+			return problem;
+
+		} else {
+
+			Random r = new Random();
+
+			int kys = r.nextInt(data.getPictures().size());
+			int temp = (Math.random() <= 0.5) ? 1 : 2;
+
+			if (temp == 1) {
+				int answer = data.getPictures().get(kys).getGreens();
+
+				RapidnamingAnswer correctAnswer = new RapidnamingAnswer("" + answer);
+				RapidnamingProblem problem = new RapidnamingProblem("" + answer);
+				problem.setCorrectAnswer(correctAnswer);
+				problem.setPicture(data.getPictures().get(kys).getPictureNumber());
+				problem.setColor("green");
+
+				return problem;
+			} else {
+				int answer = data.getPictures().get(kys).getReds();
+
+				RapidnamingAnswer correctAnswer = new RapidnamingAnswer("" + answer);
+				RapidnamingProblem problem = new RapidnamingProblem("" + answer);
+				problem.setCorrectAnswer(correctAnswer);
+				problem.setPicture(data.getPictures().get(kys).getPictureNumber());
+				problem.setColor("red");
+
+				return problem;
+			}
+
 		}
-
-		for (String s : data.getSequence()) {
-			System.out.print(s + " ");
-		}
-
-		System.out.println(count);
-		System.out.println("");
-		System.out.println("");
-
-		String answer = data.getSequence()[count];
-
-		count++;
-
-		RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);
-		RapidnamingProblem problem = new RapidnamingProblem(answer);
-		problem.setCorrectAnswer(correctAnswer);
-
-		return problem;
 
 	}
 
