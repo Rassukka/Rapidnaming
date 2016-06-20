@@ -43,57 +43,31 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		 * "button" elementtiin shortcuttia, enkä sitä pois tehtävän seuraava kysymys painikkeesta.
 		 */
 
-		if (data.getMode() == Mode.WORDS) {
-
-			Button button = new Button("Aloita tehtävä");
-			button.addClickListener(e -> {
-				this.removeComponent(button);
-				CountdownClock clock = new CountdownClock();
-				Calendar c = Calendar.getInstance();
-				c.add(Calendar.SECOND, 4);
-				clock.setDate(c.getTime());
-				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Sana näytetään %s sekunnin kuluttua." + "</span>");
-				clock.addEndEventListener(new EndEventListener() {
-					public void countDownEnded(CountdownClock clock) {
-						clearFields();
+		Button button = new Button("Aloita tehtävä");
+		button.addClickListener(e -> {
+			this.removeComponent(button);
+			CountdownClock clock = new CountdownClock();
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.SECOND, 4);
+			clock.setDate(c.getTime());
+			clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Sana näytetään %s sekunnin kuluttua." + "</span>");
+			clock.addEndEventListener(new EndEventListener() {
+				public void countDownEnded(CountdownClock clock) {
+					clearFields();
+					if (data.getMode() == RapidnamingMode.WORDS) {
 						showWord(problem);
-					}
-				});
-
-				this.addComponent(clock);
-				this.setMargin(true);
-				this.setSpacing(true);
-			});
-
-			this.addComponents(button);
-			this.setMargin(true);
-			this.setSpacing(true);
-
-		} else {
-			Button button = new Button("Aloita tehtävä");
-			button.addClickListener(e -> {
-				this.removeComponent(button);
-				CountdownClock clock = new CountdownClock();
-				Calendar c = Calendar.getInstance();
-				c.add(Calendar.SECOND, 4);
-				clock.setDate(c.getTime());
-				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Kuva näytetään %s sekunnin kuluttua." + "</span>");
-				clock.addEndEventListener(new EndEventListener() {
-					public void countDownEnded(CountdownClock clock) {
-						clearFields();
+					} else if (data.getMode() == RapidnamingMode.PICTURES) {
 						showImage(problem);
 					}
-				});
-
-				this.addComponent(clock);
-				this.setMargin(true);
-				this.setSpacing(true);
+				}
 			});
 
-			this.addComponents(button);
-			this.setMargin(true);
-			this.setSpacing(true);
-		}
+			this.addComponent(clock);
+			margins();
+		});
+
+		this.addComponents(button);
+		margins();
 	}
 
 	public void showWord(RapidnamingProblem problem) {
@@ -122,8 +96,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		});
 
 		this.addComponent(clock);
-		this.setMargin(true);
-		this.setSpacing(true);
+		margins();
 	}
 
 	public void wordGuestion(RapidnamingProblem problem) {
@@ -132,8 +105,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		userAnswer.setCaption("Mikä sana oli?");
 
 		this.addComponents(userAnswer);
-		this.setMargin(true);
-		this.setSpacing(true);
+		margins();
 	}
 
 	public void showImage(RapidnamingProblem problem) {
@@ -150,7 +122,8 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		c.add(Calendar.MILLISECOND, data.getTimeShown());
 		clock.setDate(c.getTime());
 
-		this.addComponent(problem.getPicture());
+		// ?
+		this.addComponent(data.getPicture());
 
 		clock.addEndEventListener(new EndEventListener() {
 			public void countDownEnded(CountdownClock clock) {
@@ -161,31 +134,28 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 		// turhaa?
 		this.addComponent(clock);
-		this.setMargin(true);
-		this.setSpacing(true);
+		margins();
 	}
 
 	public void imageGuestion(RapidnamingProblem problem) {
 		intAnswer = new IntegerField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
 		intAnswer.focus();
-		if (problem.getColor().equals("green")) {
+		if (data.getColor().equals("green")) {
 			intAnswer.setCaption("Kuinka monta vihreää palloa?"); // ympyrää?
-		} else {
+		} else if (data.getColor().equals("red")) {
 			intAnswer.setCaption("Kuinka monta punaista palloa?"); // vihreä ja punainen
 																	// värikoodattuna?
 		}
 
 		this.addComponents(intAnswer);
-		this.setMargin(true);
-		this.setSpacing(true);
+		margins();
 	}
 
 	@Override
 	public void showSolution(RapidnamingProblem problem) {
 
-		if (data.getMode() == Mode.WORDS) {
-
-			String answer = getSolution(problem);
+		String answer = getSolution(problem);
+		if (data.getMode() == RapidnamingMode.WORDS) {
 			String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
 			if (userAnswer.getValue().toLowerCase().equals(answer)) {
 				userAnswer.setEnabled(false);
@@ -203,8 +173,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 				correct.addStyleName("correctAnswer");
 				this.addComponent(correct);
 			}
-		} else {
-			String answer = getSolution(problem);
+		} else if (data.getMode() == RapidnamingMode.PICTURES) {
 			if (intAnswer.getValue().equals(answer)) {
 				intAnswer.setEnabled(false);
 				intAnswer.addStyleName("Rapidnaming-disabled");
@@ -231,8 +200,16 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	@Override
 	public AbstractMathAnswer getAnswer() {
-		String answer = userAnswer.getValue().toLowerCase();
-		return new RapidnamingAnswer(answer);
+		if (data.getMode() == RapidnamingMode.WORDS) {
+			String answer = userAnswer.getValue().toLowerCase();
+			return new RapidnamingAnswer(answer);
+		} else if (data.getMode() == RapidnamingMode.PICTURES) {
+			String answer = intAnswer.getValue().toString();
+			return new RapidnamingAnswer(answer);
+		} else {
+			// Jokin virhe tänne?
+			return null;
+		}
 
 	}
 
@@ -250,6 +227,11 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	@Override
 	public void setLayoutController(MathLayoutController cont) {
 		// MathLayoutController gives access to the check button
+	}
+
+	private void margins() {
+		this.setMargin(true);
+		this.setSpacing(true);
 	}
 
 }

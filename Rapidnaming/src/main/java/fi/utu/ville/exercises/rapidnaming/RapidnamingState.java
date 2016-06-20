@@ -26,7 +26,7 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 	@Override
 	protected RapidnamingProblem createProblem() {
 
-		if (data.getMode() == Mode.WORDS) {
+		if (data.getMode() == RapidnamingMode.WORDS) {
 			/*
 			 * ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa
 			 * hyppimään edes takaisin?
@@ -54,7 +54,7 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 
 			return problem;
 
-		} else {
+		} else if (data.getMode() == RapidnamingMode.PICTURES) {
 
 			Random r = new Random();
 
@@ -62,27 +62,33 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 			int temp = (Math.random() <= 0.5) ? 1 : 2;
 
 			if (temp == 1) {
+
 				int answer = data.getPictures().get(kys).getGreens();
 
 				RapidnamingAnswer correctAnswer = new RapidnamingAnswer("" + answer);
 				RapidnamingProblem problem = new RapidnamingProblem("" + answer);
 				problem.setCorrectAnswer(correctAnswer);
-				problem.setPicture(data.getPictures().get(kys).getPictureNumber());
-				problem.setColor("green");
+				data.setPicture(data.getPictures().get(kys).getPictureNumber());
+				data.setColor("green");
 
 				return problem;
+
 			} else {
+
 				int answer = data.getPictures().get(kys).getReds();
 
 				RapidnamingAnswer correctAnswer = new RapidnamingAnswer("" + answer);
 				RapidnamingProblem problem = new RapidnamingProblem("" + answer);
 				problem.setCorrectAnswer(correctAnswer);
-				problem.setPicture(data.getPictures().get(kys).getPictureNumber());
-				problem.setColor("red");
+				data.setPicture(data.getPictures().get(kys).getPictureNumber());
+				data.setColor("red");
 
 				return problem;
 			}
 
+		} else {
+			// tai joku virhe?
+			return null;
 		}
 
 	}

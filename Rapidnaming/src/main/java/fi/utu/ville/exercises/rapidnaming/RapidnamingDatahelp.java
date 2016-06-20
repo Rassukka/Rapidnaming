@@ -24,8 +24,8 @@ public class RapidnamingDatahelp {
 		return greens;
 	}
 
-	public void setGreens(int geens) {
-		this.greens = geens;
+	public void setGreens(int greens) {
+		this.greens = greens;
 	}
 
 	public int getReds() {

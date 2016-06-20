@@ -1,5 +1,5 @@
 package fi.utu.ville.exercises.rapidnaming;
 
-public enum Mode {
+public enum RapidnamingMode {
 	WORDS, PICTURES
 }

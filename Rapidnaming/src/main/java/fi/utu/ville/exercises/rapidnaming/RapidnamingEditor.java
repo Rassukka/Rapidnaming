@@ -31,15 +31,15 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	private VerticalLayout view;
 
-	private Mode mode;
+	private RapidnamingMode rapidnamingMode;
 
 	private final Localizer localizer;
 
-	public RapidnamingEditor(RapidnamingData oldData, Localizer localizer, VerticalLayout view, Mode mode) {
+	public RapidnamingEditor(RapidnamingData oldData, Localizer localizer, VerticalLayout view, RapidnamingMode rapidnamingMode) {
 		this.localizer = localizer;
 		this.oldData = oldData;
 		this.view = new VerticalLayout();
-		this.mode = mode;
+		this.rapidnamingMode = rapidnamingMode;
 	}
 
 	@Override
@@ -77,11 +77,11 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 		valinta.addValueChangeListener(event -> {
 			if (valinta.getValue().equals("Sanat")) {
-				mode = Mode.WORDS;
+				rapidnamingMode = RapidnamingMode.WORDS;
 				view.removeAllComponents();
 				view.addComponents(valinta, numberOfExercises, timeShown, words, sanoja);
 			} else if (valinta.getValue().equals("Kuvat")) {
-				mode = Mode.PICTURES;
+				rapidnamingMode = RapidnamingMode.PICTURES;
 				view.removeAllComponents();
 				view.addComponents(valinta, numberOfExercises, timeShown);
 
@@ -95,14 +95,14 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	@Override
 	public RapidnamingData getCurrData() {
-		switch (mode) {
+		switch (rapidnamingMode) {
 		case WORDS:
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), Mode.WORDS);
+			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), RapidnamingMode.WORDS);
 		case PICTURES:
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), Mode.PICTURES);
+			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), RapidnamingMode.PICTURES);
 		default:
 			// jotain muuta tänne?
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), Mode.WORDS);
+			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), RapidnamingMode.WORDS);
 		}
 
 	}

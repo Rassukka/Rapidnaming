@@ -1,6 +1,11 @@
 package fi.utu.ville.exercises.rapidnaming;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Image;
 
 import fi.utu.ville.exercises.model.ExerciseData;
 
@@ -10,27 +15,30 @@ public class RapidnamingData implements ExerciseData {
 
 	private int numberOfQuestions;
 	private int timeShown;
-	private Mode mode;
+	private RapidnamingMode rapidnamingMode;
 
 	private String[] words;
 	private String[] sequence;
 
 	private ArrayList<RapidnamingDatahelp> pictures;
 
+	private String color;
+	private Image picture;
+
 	// sanoille
-	public RapidnamingData(int questions, int timeShown, String[] words, Mode mode) {
+	public RapidnamingData(int questions, int timeShown, String[] words, RapidnamingMode rapidnamingMode) {
 		this.numberOfQuestions = questions;
 		this.timeShown = timeShown;
 		this.words = words;
 		this.sequence = getSequence(words);
-		this.mode = mode;
+		this.rapidnamingMode = rapidnamingMode;
 	}
 
 	// kuville
-	public RapidnamingData(int questions, int timeShown, Mode mode) {
+	public RapidnamingData(int questions, int timeShown, RapidnamingMode rapidnamingMode) {
 		this.numberOfQuestions = questions;
 		this.timeShown = timeShown;
-		this.mode = mode;
+		this.rapidnamingMode = rapidnamingMode;
 		this.pictures = getPictures();
 	}
 
@@ -73,12 +81,12 @@ public class RapidnamingData implements ExerciseData {
 		return sequence;
 	}
 
-	public Mode getMode() {
-		return mode;
+	public RapidnamingMode getMode() {
+		return rapidnamingMode;
 	}
 
-	public void setMode(Mode mode) {
-		this.mode = mode;
+	public void setMode(RapidnamingMode rapidnamingMode) {
+		this.rapidnamingMode = rapidnamingMode;
 	}
 
 	public ArrayList<RapidnamingDatahelp> getPictures() {
@@ -91,6 +99,24 @@ public class RapidnamingData implements ExerciseData {
 		pictures.add(new RapidnamingDatahelp(3, 5, 3));
 		pictures.add(new RapidnamingDatahelp(4, 4, 6));
 		pictures.add(new RapidnamingDatahelp(5, 6, 4));
+	}
+
+	// oikeassa paikassa nämä?
+	public void setPicture(int pictureNumber) {
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		picture = new Image("", new FileResource(new File(basepath + "/WEB-INF/images/kuva" + pictureNumber + ".png")));
+	}
+
+	public Image getPicture() {
+		return picture;
+	}
+
+	public void setColor(String colors) {
+		color = colors;
+	}
+
+	public String getColor() {
+		return color;
 	}
 
 }
