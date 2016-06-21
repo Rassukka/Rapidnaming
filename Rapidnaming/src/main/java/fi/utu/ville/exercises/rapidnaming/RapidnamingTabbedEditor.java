@@ -60,8 +60,6 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 
 		if (oldData == null) {
 
-			// Melko varma ettei tämä toimi niin kun sen pitäisi. default words syy miksi sanat
-			// hyppii???
 			RapidnamingData easy = new RapidnamingData(5, 1500, getDefaultWords(), RapidnamingMode.WORDS);
 			RapidnamingData normal = new RapidnamingData(10, 1500, getDefaultWords(), RapidnamingMode.WORDS);
 			RapidnamingData hard = new RapidnamingData(15, 1500, getDefaultWords(), RapidnamingMode.WORDS);

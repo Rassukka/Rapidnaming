@@ -27,29 +27,17 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 	protected RapidnamingProblem createProblem() {
 
 		if (data.getMode() == RapidnamingMode.WORDS) {
-			/*
-			 * ohjelma ei jostain syystä ota järjestyksessä vaan muutaman ensimmäisen jälkeen alkaa
-			 * hyppimään edes takaisin?
-			 */
 
 			if (data.getSequence().length < count) {
 				count = 0;
 			}
-
-			for (String s : data.getSequence()) {
-				System.out.print(s + " ");
-			}
-
-			System.out.println(count);
-			System.out.println("");
-			System.out.println("");
 
 			String answer = data.getSequence()[count];
 
 			count++;
 
 			RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);
-			RapidnamingProblem problem = new RapidnamingProblem(answer);
+			RapidnamingProblem problem = new RapidnamingProblem(answer, null);
 			problem.setCorrectAnswer(correctAnswer);
 
 			return problem;
@@ -58,36 +46,20 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 
 			Random r = new Random();
 
-			int kys = r.nextInt(data.getPictures().size());
-			int temp = (Math.random() <= 0.5) ? 1 : 2;
+			// muista vaihtaa?
+			int kys = r.nextInt(data.getPicturesSize());
 
-			if (temp == 1) {
+			RapidnamingDatahelp help = data.getPictures(kys);
 
-				int answer = data.getPictures().get(kys).getGreens();
+			String answer = help.getAnswer();
 
-				RapidnamingAnswer correctAnswer = new RapidnamingAnswer("" + answer);
-				RapidnamingProblem problem = new RapidnamingProblem("" + answer);
-				problem.setCorrectAnswer(correctAnswer);
-				data.setPicture(data.getPictures().get(kys).getPictureNumber());
-				data.setColor("green");
+			RapidnamingAnswer correctAnswer = new RapidnamingAnswer(answer);
+			RapidnamingProblem problem = new RapidnamingProblem(answer, help);
+			problem.setCorrectAnswer(correctAnswer);
 
-				return problem;
-
-			} else {
-
-				int answer = data.getPictures().get(kys).getReds();
-
-				RapidnamingAnswer correctAnswer = new RapidnamingAnswer("" + answer);
-				RapidnamingProblem problem = new RapidnamingProblem("" + answer);
-				problem.setCorrectAnswer(correctAnswer);
-				data.setPicture(data.getPictures().get(kys).getPictureNumber());
-				data.setColor("red");
-
-				return problem;
-			}
+			return problem;
 
 		} else {
-			// tai joku virhe?
 			return null;
 		}
 

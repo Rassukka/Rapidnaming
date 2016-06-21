@@ -1,15 +1,37 @@
 package fi.utu.ville.exercises.rapidnaming;
 
+import java.io.File;
+
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Image;
+
 public class RapidnamingDatahelp {
 
 	private int pictureNumber;
-	private int greens;
-	private int reds;
+	private String guestion;
+	private String answer;
 
-	public RapidnamingDatahelp(int pictureNumber, int greens, int reds) {
+	public RapidnamingDatahelp(int pictureNumber, String guestion, String answer) {
 		this.pictureNumber = pictureNumber;
-		this.greens = greens;
-		this.reds = reds;
+		this.guestion = guestion;
+		this.answer = answer;
+	}
+
+	public String getGuestion() {
+		return guestion;
+	}
+
+	public void setGuestion(String guestion) {
+		this.guestion = guestion;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 
 	public int getPictureNumber() {
@@ -20,20 +42,14 @@ public class RapidnamingDatahelp {
 		this.pictureNumber = pictureNumber;
 	}
 
-	public int getGreens() {
-		return greens;
+	public Image getPicture() {
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		return new Image("", new FileResource(new File(basepath + "/WEB-INF/images/kuva" + pictureNumber + ".png")));
 	}
 
-	public void setGreens(int greens) {
-		this.greens = greens;
-	}
-
-	public int getReds() {
-		return reds;
-	}
-
-	public void setReds(int reds) {
-		this.reds = reds;
+	public String getImageUrd() {
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		return basepath + "/WEB-INF/images/kuva" + pictureNumber + ".png";
 	}
 
 }

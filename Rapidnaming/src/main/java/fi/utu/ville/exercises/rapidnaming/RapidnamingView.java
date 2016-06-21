@@ -8,14 +8,13 @@ import org.vaadin.kim.countdownclock.CountdownClock.EndEventListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import edu.vserver.exercises.math.essentials.layout.AbstractMathAnswer;
 import edu.vserver.exercises.math.essentials.layout.MathExerciseView;
 import edu.vserver.exercises.math.essentials.layout.MathLayoutController;
 import fi.utu.ville.standardutils.Localizer;
-import fi.utu.ville.standardutils.ui.IntegerField;
+import fi.utu.ville.standardutils.ui.CleanTextField;
 
 public class RapidnamingView extends VerticalLayout implements MathExerciseView<RapidnamingProblem> {
 
@@ -24,8 +23,9 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	private final RapidnamingData data;
 	private final Localizer localizer;
 
-	private TextField userAnswer;
-	private IntegerField intAnswer;
+	private CleanTextField userAnswer;
+
+	private Label correct;
 
 	public RapidnamingView(RapidnamingData data, Localizer localizer) {
 		this.data = data;
@@ -42,32 +42,58 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		 * Jos tässävaiheessa painaa enteriä niin koko tehtävä menee sekaisin, en saanut laitettua
 		 * "button" elementtiin shortcuttia, enkä sitä pois tehtävän seuraava kysymys painikkeesta.
 		 */
+		if (data.getMode() == RapidnamingMode.WORDS) {
 
-		Button button = new Button("Aloita tehtävä");
-		button.addClickListener(e -> {
-			this.removeComponent(button);
-			CountdownClock clock = new CountdownClock();
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.SECOND, 4);
-			clock.setDate(c.getTime());
-			clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Sana näytetään %s sekunnin kuluttua." + "</span>");
-			clock.addEndEventListener(new EndEventListener() {
-				public void countDownEnded(CountdownClock clock) {
-					clearFields();
-					if (data.getMode() == RapidnamingMode.WORDS) {
+			Button button = new Button("Aloita tehtävä");
+			button.addClickListener(e -> {
+				this.removeComponent(button);
+				CountdownClock clock = new CountdownClock();
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.SECOND, 4);
+				clock.setDate(c.getTime());
+				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + "Sana näytetään %s sekunnin kuluttua." + "</span>");
+				clock.addEndEventListener(new EndEventListener() {
+					public void countDownEnded(CountdownClock clock) {
+						clearFields();
 						showWord(problem);
-					} else if (data.getMode() == RapidnamingMode.PICTURES) {
-						showImage(problem);
+
 					}
-				}
+				});
+
+				this.addComponent(clock);
+				margins();
 			});
 
-			this.addComponent(clock);
+			this.addComponents(button);
 			margins();
-		});
 
-		this.addComponents(button);
-		margins();
+		} else if (data.getMode() == RapidnamingMode.PICTURES) {
+
+			Button button = new Button("Aloita tehtävä");
+			button.addClickListener(e -> {
+				this.removeComponent(button);
+				CountdownClock clock = new CountdownClock();
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.SECOND, 4);
+				clock.setDate(c.getTime());
+				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + problem.getHelp().getGuestion() + "<br/> Sana näytetään %s sekunnin kuluttua." + "</span>");
+				clock.addEndEventListener(new EndEventListener() {
+
+					public void countDownEnded(CountdownClock clock) {
+						clearFields();
+						showImage(problem);
+
+					}
+
+				});
+
+				this.addComponent(clock);
+				margins();
+			});
+
+			this.addComponents(button);
+			margins();
+		}
 	}
 
 	public void showWord(RapidnamingProblem problem) {
@@ -100,7 +126,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	}
 
 	public void wordGuestion(RapidnamingProblem problem) {
-		userAnswer = new TextField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
+		userAnswer = new CleanTextField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
 		userAnswer.focus();
 		userAnswer.setCaption("Mikä sana oli?");
 
@@ -122,32 +148,26 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 		c.add(Calendar.MILLISECOND, data.getTimeShown());
 		clock.setDate(c.getTime());
 
-		// ?
-		this.addComponent(data.getPicture());
+		this.addComponent(problem.getHelp().getPicture());
+		clock.setFormat("");
 
 		clock.addEndEventListener(new EndEventListener() {
 			public void countDownEnded(CountdownClock clock) {
 				clearFields();
-				wordGuestion(problem);
+				imageGuestion(problem);
 			}
 		});
 
-		// turhaa?
 		this.addComponent(clock);
 		margins();
 	}
 
 	public void imageGuestion(RapidnamingProblem problem) {
-		intAnswer = new IntegerField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
-		intAnswer.focus();
-		if (data.getColor().equals("green")) {
-			intAnswer.setCaption("Kuinka monta vihreää palloa?"); // ympyrää?
-		} else if (data.getColor().equals("red")) {
-			intAnswer.setCaption("Kuinka monta punaista palloa?"); // vihreä ja punainen
-																	// värikoodattuna?
-		}
+		userAnswer = new CleanTextField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
+		userAnswer.focus();
+		userAnswer.setCaption(problem.getHelp().getGuestion()); // kuvat värikoodatttuna
 
-		this.addComponents(intAnswer);
+		this.addComponents(userAnswer);
 		margins();
 	}
 
@@ -155,41 +175,26 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	public void showSolution(RapidnamingProblem problem) {
 
 		String answer = getSolution(problem);
-		if (data.getMode() == RapidnamingMode.WORDS) {
-			String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
-			if (userAnswer.getValue().toLowerCase().equals(answer)) {
-				userAnswer.setEnabled(false);
-				userAnswer.addStyleName("Rapidnaming-disabled");
-				Label oikein = new Label("Oikein!");
-				oikein.addStyleName("oikein");
-				this.addComponent(oikein);
-			} else {
-				userAnswer.setEnabled(false);
-				userAnswer.addStyleName("Rapidnaming-disabled");
-				Label vaarin = new Label("Väärin!");
-				vaarin.addStyleName("vaarin");
-				this.addComponent(vaarin);
-				Label correct = new Label("Oikea vastaus oli: " + capitalized);
-				correct.addStyleName("correctAnswer");
-				this.addComponent(correct);
+		String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
+		if (userAnswer.getValue().toLowerCase().equals(answer)) {
+			userAnswer.setEnabled(false);
+			userAnswer.addStyleName("Rapidnaming-disabled");
+			Label oikein = new Label("Oikein!");
+			oikein.addStyleName("oikein");
+			this.addComponent(oikein);
+		} else {
+			userAnswer.setEnabled(false);
+			userAnswer.addStyleName("Rapidnaming-disabled");
+			Label vaarin = new Label("Väärin!");
+			vaarin.addStyleName("vaarin");
+			this.addComponent(vaarin);
+			if (data.getMode() == RapidnamingMode.WORDS) {
+				correct = new Label("Oikea vastaus oli: " + capitalized);
+			} else if (data.getMode() == RapidnamingMode.PICTURES) {
+				correct = new Label("Oikea vastaus oli: " + answer);
 			}
-		} else if (data.getMode() == RapidnamingMode.PICTURES) {
-			if (intAnswer.getValue().equals(answer)) {
-				intAnswer.setEnabled(false);
-				intAnswer.addStyleName("Rapidnaming-disabled");
-				Label oikein = new Label("Oikein!");
-				oikein.addStyleName("oikein");
-				this.addComponent(oikein);
-			} else {
-				intAnswer.setEnabled(false);
-				intAnswer.addStyleName("Rapidnaming-disabled");
-				Label vaarin = new Label("Väärin!");
-				vaarin.addStyleName("vaarin");
-				this.addComponent(vaarin);
-				Label correct = new Label("Oikea vastaus oli: " + answer);
-				correct.addStyleName("correctAnswer");
-				this.addComponent(correct);
-			}
+			correct.addStyleName("correctAnswer");
+			this.addComponent(correct);
 		}
 	}
 
@@ -200,16 +205,8 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	@Override
 	public AbstractMathAnswer getAnswer() {
-		if (data.getMode() == RapidnamingMode.WORDS) {
-			String answer = userAnswer.getValue().toLowerCase();
-			return new RapidnamingAnswer(answer);
-		} else if (data.getMode() == RapidnamingMode.PICTURES) {
-			String answer = intAnswer.getValue().toString();
-			return new RapidnamingAnswer(answer);
-		} else {
-			// Jokin virhe tänne?
-			return null;
-		}
+		String answer = userAnswer.getValue().toLowerCase().trim();
+		return new RapidnamingAnswer(answer);
 
 	}
 

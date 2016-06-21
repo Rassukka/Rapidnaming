@@ -1,5 +1,7 @@
 package fi.utu.ville.exercises.rapidnaming;
 
+import java.util.ArrayList;
+
 import org.vaadin.hene.expandingtextarea.ExpandingTextArea;
 import org.vaadin.hene.expandingtextarea.ExpandingTextArea.RowsChangeEvent;
 import org.vaadin.hene.expandingtextarea.ExpandingTextArea.RowsChangeListener;
@@ -99,10 +101,15 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		case WORDS:
 			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), RapidnamingMode.WORDS);
 		case PICTURES:
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), RapidnamingMode.PICTURES);
+			ArrayList<RapidnamingDatahelp> list = new ArrayList<RapidnamingDatahelp>();
+			list.add(new RapidnamingDatahelp(1, "Kuinka monta punaista palloa?", "4"));
+			list.add(new RapidnamingDatahelp(1, "Kuinka monta vihreää palloa?", "3"));
+
+			RapidnamingData data = new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), RapidnamingMode.PICTURES, list);
+			return data;
 		default:
-			// jotain muuta tänne?
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), RapidnamingMode.WORDS);
+			System.out.println("Virhe editorissa!");
+			return null;
 		}
 
 	}

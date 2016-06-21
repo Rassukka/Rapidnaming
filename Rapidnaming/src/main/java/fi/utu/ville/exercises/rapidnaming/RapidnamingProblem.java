@@ -12,9 +12,11 @@ public class RapidnamingProblem implements Problem {
 
 	private boolean correctness;
 	private String expression;
+	private RapidnamingDatahelp help;
 
-	public RapidnamingProblem(String expression) {
+	public RapidnamingProblem(String expression, RapidnamingDatahelp help) {
 		this.expression = expression;
+		this.setHelp(help);
 	}
 
 	@Override
@@ -48,6 +50,14 @@ public class RapidnamingProblem implements Problem {
 	@Override
 	public String getUserAnswer() {
 		return userAnswer == null ? "" : userAnswer.getAnswer();
+	}
+
+	public RapidnamingDatahelp getHelp() {
+		return help;
+	}
+
+	public void setHelp(RapidnamingDatahelp help) {
+		this.help = help;
 	}
 
 }
