@@ -40,4 +40,6 @@
     <inherits name="org.vaadin.hene.expandingtextarea.widgetset.ExpandingtextareaWidgetset" />
 
     <inherits name="eu.michaelvogt.vaadin.attribute.AttributeWidgetset" />
+
+    
 </module>

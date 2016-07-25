@@ -46,7 +46,6 @@ public class RapidnamingState extends AbstractMathState<RapidnamingData, Rapidna
 
 			Random r = new Random();
 
-			// muista vaihtaa?
 			int kys = r.nextInt(data.getPicturesSize());
 
 			RapidnamingDatahelp help = data.getPictures(kys);

@@ -76,7 +76,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 				Calendar c = Calendar.getInstance();
 				c.add(Calendar.SECOND, 4);
 				clock.setDate(c.getTime());
-				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + problem.getHelp().getGuestion() + "<br/> Sana näytetään %s sekunnin kuluttua." + "</span>");
+				clock.setFormat("<span style='font: bold 25px Arial; margin: 10px'>" + problem.getHelp().getGuestion() + "<br/> Kuva näytetään %s sekunnin kuluttua." + "</span>");
 				clock.addEndEventListener(new EndEventListener() {
 
 					public void countDownEnded(CountdownClock clock) {
