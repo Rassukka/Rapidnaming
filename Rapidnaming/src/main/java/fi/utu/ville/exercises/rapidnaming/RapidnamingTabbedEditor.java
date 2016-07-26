@@ -60,9 +60,9 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 
 		if (oldData == null) {
 
-			RapidnamingData easy = new RapidnamingData(5, 1500, getDefaultWords(), RapidnamingMode.WORDS);
-			RapidnamingData normal = new RapidnamingData(10, 1500, getDefaultWords(), RapidnamingMode.WORDS);
-			RapidnamingData hard = new RapidnamingData(15, 1500, getDefaultWords(), RapidnamingMode.WORDS);
+			RapidnamingData easy = new RapidnamingData(5, 1500, getDefaultWords(), false, RapidnamingMode.WORDS);
+			RapidnamingData normal = new RapidnamingData(10, 1500, getDefaultWords(), false, RapidnamingMode.WORDS);
+			RapidnamingData hard = new RapidnamingData(15, 1500, getDefaultWords(), false, RapidnamingMode.WORDS);
 
 			this.easyEditor = new RapidnamingEditor(easy, getLocalizer(), new VerticalLayout(), RapidnamingMode.WORDS);
 			this.normalEditor = new RapidnamingEditor(normal, getLocalizer(), new VerticalLayout(), RapidnamingMode.WORDS);
@@ -95,7 +95,7 @@ public class RapidnamingTabbedEditor extends MathTabbedEditor<RapidnamingData> {
 	}
 
 	private String[] getDefaultWords() {
-		String[] words = new String[] { "gabrielle", "patel", "brian", "robinson", "eduardo", "haugen", "hoen", "johansen", "alejandro", "angel", "karlsson", "yahir", "gustavsson", "haiden", "svensson", "emily", "stewart", "corinne", "davis", "ryann" };
+		String[] words = new String[] { "pulpetti" + "kynä" + "kirja" + "penaali" + "tietokone" + "valkotaulu" + "tuoli" + "opettaja" + "oppilas" + "liitutaulu" + "pyyhekumi" + "pensseli" + "taideteokset" + "sakset" + "kynälaatikko" + "liitu" + "permanenttitussi" + "hiiri" + "näppäimistö" + "oppitunti" };
 		return words;
 	}
 

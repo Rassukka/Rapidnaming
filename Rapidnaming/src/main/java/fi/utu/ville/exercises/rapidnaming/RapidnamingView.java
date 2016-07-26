@@ -26,6 +26,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	private CleanTextField userAnswer;
 
 	private Label correct;
+	private Label huom;
 
 	public RapidnamingView(RapidnamingData data, Localizer localizer) {
 		this.data = data;
@@ -98,12 +99,8 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	public void showWord(RapidnamingProblem problem) {
 
-		/*
-		 * countdownclock ei tarpeeksi nopea, jos aika on alle sekunnin, niin kuva ei näy melkein
-		 * ollenkaan, mutta jos aika on yli sekunnin - alle kaksi sekuntia, kuvan näyttöaika ei
-		 * muutu. Melko heppo tehtävä jopa näillä englanninkielisillä sanoilla jopa 9 vuotiaalle
-		 * pikkuveljelle.
-		 */
+		// Ajoitus ei toimi, esim. 0001ms ja 999ms on sama asia kuin myös 2001 ja 2999, tähän pitää
+		// tehdä erilainen ratkaisu esim javascriptin avulla.
 
 		CountdownClock clock = new CountdownClock();
 		Calendar c = Calendar.getInstance();
@@ -136,12 +133,8 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	public void showImage(RapidnamingProblem problem) {
 
-		/*
-		 * countdownclock ei tarpeeksi nopea, jos aika on alle sekunnin, niin kuva ei näy melkein
-		 * ollenkaan, mutta jos aika on yli sekunnin - alle kaksi sekuntia, kuvan näyttöaika ei
-		 * muutu. Melko heppo tehtävä jopa näillä englanninkielisillä sanoilla jopa 9 vuotiaalle
-		 * pikkuveljelle.
-		 */
+		// Ajoitus ei toimi, esim. 0001ms ja 999ms on sama asia kuin myös 2001 ja 2999, tähän pitää
+		// tehdä erilainen ratkaisu esim javascriptin avulla.
 
 		CountdownClock clock = new CountdownClock();
 		Calendar c = Calendar.getInstance();
@@ -165,7 +158,7 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 	public void imageGuestion(RapidnamingProblem problem) {
 		userAnswer = new CleanTextField(localizer.getUIText(RapidnamingUiConstants.ANSWER));
 		userAnswer.focus();
-		userAnswer.setCaption(problem.getHelp().getGuestion()); // kuvat värikoodatttuna
+		userAnswer.setCaption(problem.getHelp().getGuestion());
 
 		this.addComponents(userAnswer);
 		margins();
@@ -176,26 +169,59 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 		String answer = getSolution(problem);
 		String capitalized = answer.substring(0, 1).toUpperCase() + answer.substring(1);
-		if (userAnswer.getValue().toLowerCase().equals(answer)) {
+
+		if (data.getIsolla() == true) {
 			userAnswer.setEnabled(false);
 			userAnswer.addStyleName("Rapidnaming-disabled");
-			Label oikein = new Label("Oikein!");
-			oikein.addStyleName("oikein");
-			this.addComponent(oikein);
+			if (userAnswer.getValue().equals(answer)) {
+				Label oikein = new Label("Oikein!");
+				oikein.addStyleName("oikein");
+				this.addComponent(oikein);
+			} else {
+				Label vaarin = new Label("Väärin!");
+				vaarin.addStyleName("vaarin");
+				this.addComponent(vaarin);
+				if (data.getMode() == RapidnamingMode.WORDS) {
+					correct = new Label("Oikea vastaus oli: " + capitalized);
+					huom = new Label("Huomaa isot kirjaimet!");
+					correct.addStyleName("correctAnswer");
+					huom.addStyleName("correctAnswer");
+					if (capitalized.toLowerCase().equals(userAnswer.getValue())) {
+						this.addComponents(huom, correct);
+					} else {
+						this.addComponent(correct);
+					}
+
+				} else if (data.getMode() == RapidnamingMode.PICTURES) {
+					correct = new Label("Oikea vastaus oli: " + answer);
+					correct.addStyleName("correctAnswer");
+					this.addComponent(correct);
+				}
+				correct.addStyleName("correctAnswer");
+				this.addComponent(correct);
+			}
 		} else {
 			userAnswer.setEnabled(false);
 			userAnswer.addStyleName("Rapidnaming-disabled");
-			Label vaarin = new Label("Väärin!");
-			vaarin.addStyleName("vaarin");
-			this.addComponent(vaarin);
-			if (data.getMode() == RapidnamingMode.WORDS) {
-				correct = new Label("Oikea vastaus oli: " + capitalized);
-			} else if (data.getMode() == RapidnamingMode.PICTURES) {
-				correct = new Label("Oikea vastaus oli: " + answer);
+
+			if (userAnswer.getValue().toLowerCase().equals(answer)) {
+				Label oikein = new Label("Oikein!");
+				oikein.addStyleName("oikein");
+				this.addComponent(oikein);
+			} else {
+				Label vaarin = new Label("Väärin!");
+				vaarin.addStyleName("vaarin");
+				this.addComponent(vaarin);
+				if (data.getMode() == RapidnamingMode.WORDS) {
+					correct = new Label("Oikea vastaus oli: " + capitalized);
+				} else if (data.getMode() == RapidnamingMode.PICTURES) {
+					correct = new Label("Oikea vastaus oli: " + answer);
+				}
+				correct.addStyleName("correctAnswer");
+				this.addComponent(correct);
 			}
-			correct.addStyleName("correctAnswer");
-			this.addComponent(correct);
 		}
+
 	}
 
 	public String getSolution(RapidnamingProblem problem) {
@@ -205,9 +231,13 @@ public class RapidnamingView extends VerticalLayout implements MathExerciseView<
 
 	@Override
 	public AbstractMathAnswer getAnswer() {
-		String answer = userAnswer.getValue().toLowerCase().trim();
-		return new RapidnamingAnswer(answer);
-
+		if (data.getIsolla() == true) {
+			String answer = userAnswer.getValue().trim();
+			return new RapidnamingAnswer(answer);
+		} else {
+			String answer = userAnswer.getValue().toLowerCase().trim();
+			return new RapidnamingAnswer(answer);
+		}
 	}
 
 	@Override

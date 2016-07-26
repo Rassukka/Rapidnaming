@@ -36,6 +36,8 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 	private ExpandingTextArea words;
 
+	private CheckBox isolla;
+
 	final RapidnamingData oldData;
 
 	private VerticalLayout view;
@@ -56,11 +58,13 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 	@Override
 	public VerticalLayout drawSettings() {
 
-		valinta = new OptionGroup("Sanat vai Kuvat?");
+		valinta = new OptionGroup("Näytetäänkö oppilaalle sanoja vai kuvia?");
 		valinta.addItems("Sanat", "Kuvat");
 		valinta.select("Sanat");
 
 		view.addComponent(valinta);
+		view.setMargin(true);
+		view.setSpacing(true);
 
 		numberOfExercises = new IntegerField("Kysymysten määrä: (max 20)", 20);
 		numberOfExercises.setValue(5);
@@ -70,6 +74,9 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		timeShown.setValue(1500);
 		timeShown.setWidth("40px");
 
+		isolla = new CheckBox();
+		isolla.setCaption("Otetaanko isot kirjaimet huomioon?");
+
 		words = new ExpandingTextArea("Sanat joita kysytään: (allekkain, pienellä!)");
 		words.setValue(getDefaultWords());
 		words.setImmediate(true);
@@ -78,8 +85,8 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		attribute.extend(words);
 
 		final Label sanoja = new Label("" + words.getRows());
-		sanoja.setCaption("Sanoja");
-		view.addComponents(numberOfExercises, timeShown, words, sanoja);
+		sanoja.setCaption("Sanoja listassa:");
+		view.addComponents(numberOfExercises, timeShown, isolla, words, sanoja);
 		words.addRowsChangeListener(new RowsChangeListener() {
 			public void rowsChange(RowsChangeEvent event) {
 				sanoja.setValue("" + (event.getRows() - 1));
@@ -87,7 +94,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		});
 
 		table = new Table();
-		table.setCaption("Valitse tehtävässä esiintyvät kuvat tästä");
+		table.setCaption("Valitse tehtävässä esiintyvät kuvat tästä:");
 
 		table.addContainerProperty("Kuva", Image.class, null);
 		table.addContainerProperty("Valitse kuvat", CheckBox.class, null);
@@ -99,65 +106,11 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		}
 		table.setPageLength(3);
 
-		//
-		// Panel panel = new Panel("Kaikki Kuvat");
-		// panel.setWidth(100, Unit.PERCENTAGE);
-		// panel.setHeightUndefined();
-		// view.addComponent(panel);
-		//
-		// Table table = new Table("Valitut Kuvat");
-		//
-		// // Define two columns for the built-in container
-		// table.addContainerProperty("kuva0", Image.class, null);
-		// table.addContainerProperty("kuva1", Image.class, null);
-		//
-		// // Add a row the hard way
-		// Object newItemId = table.addItem();
-		// Item row1 = table.getItem(newItemId);
-		// row1.getItemProperty("kuva0").setValue(getImage(0));
-		// row1.getItemProperty("kuva1").setValue(getImage(1));
-		//
-		// // Add a few other rows using shorthand addItem()
-		// table.addItem(new Object[] { getImage(0) }, 2);
-		// table.addItem(new Object[] { getImage(1) }, 3);
-		//
-		// // Show exactly the currently contained rows (items)
-		// table.setPageLength(table.size());
-		//
-		// panel.setContent(table);
-		//
-		// // Collect the results of the iteration into this string.
-		//
-		// // Iterate over the item identifiers of the table.
-		// for (Iterator<?> i = table.getItemIds().iterator(); i.hasNext();) {
-		// // Get the current item identifier, which is an integer.
-		// int iid = (Integer) i.next();
-		//
-		// // Now get the actual item from the table.
-		// Item item = table.getItem(iid);
-		//
-		// // And now we can get to the actual checkbox object.
-		// Button button = (Button) (item.getItemProperty("ismember").getValue());
-		//
-		// }
-
-		// panel.setContent(table);
-		//
-		// Panel panel2 = new Panel("Valitut Kuvat");
-		// panel2.setWidth(100, Unit.PERCENTAGE);
-		// panel2.setHeightUndefined();
-		// view.addComponent(panel2);
-		//
-		//
-		// panel2.setContent(table);
-
-		valinta.addValueChangeListener(event ->
-
-		{
+		valinta.addValueChangeListener(event -> {
 			if (valinta.getValue().equals("Sanat")) {
 				rapidnamingMode = RapidnamingMode.WORDS;
 				view.removeAllComponents();
-				view.addComponents(valinta, numberOfExercises, timeShown, words, sanoja);
+				view.addComponents(valinta, numberOfExercises, timeShown, isolla, words, sanoja);
 			} else if (valinta.getValue().equals("Kuvat")) {
 				rapidnamingMode = RapidnamingMode.PICTURES;
 				view.removeAllComponents();
@@ -173,9 +126,18 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 	@SuppressWarnings("deprecation")
 	@Override
 	public RapidnamingData getCurrData() {
+
+		// jos yli 20, korjaa automaattisesti, sama ajalle?
+		int number = 0;
+		if (numberOfExercises.getInteger() > 20) {
+			number = 20;
+		} else {
+			number = numberOfExercises.getInteger();
+		}
+
 		switch (rapidnamingMode) {
 		case WORDS:
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), words.getValue().split("\n"), RapidnamingMode.WORDS);
+			return new RapidnamingData(number, timeShown.getInteger(), words.getValue().split("\n"), isolla.getValue(), RapidnamingMode.WORDS);
 		case PICTURES:
 
 			ArrayList<Object> selectedImages = new ArrayList<Object>();
@@ -196,7 +158,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 
 			ArrayList<RapidnamingDatahelp> lista = pictures(imageNumbers);
 
-			return new RapidnamingData(numberOfExercises.getInteger(), timeShown.getInteger(), RapidnamingMode.PICTURES, lista);
+			return new RapidnamingData(number, timeShown.getInteger(), RapidnamingMode.PICTURES, lista);
 		default:
 			System.out.println("Virhe editorissa!");
 			return null;
@@ -220,14 +182,23 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 	}
 
 	private String getDefaultWords() {
-		String changed = "gabrielle\n" + "patel\n" + "brian\n" + "robinson\n" + "eduardo\n" + "haugen\n" + "hoen\n" + "johansen\n" + "alejandro\n" + "angel\n" + "karlsson\n" + "yahir\n" + "gustavsson\n" + "haiden\n" + "svensson\n" + "emily\n" + "stewart\n" + "corinne\n" + "davis\n" + "ryann";
+		String changed = "pulpetti\n" + "kynä\n" + "kirja\n" + "penaali\n" + "tietokone\n" + "valkotaulu\n" + "tuoli\n" + "opettaja\n" + "oppilas\n" + "liitutaulu\n" + "pyyhekumi\n" + "pensseli\n" + "taideteokset\n" + "sakset\n" + "kynälaatikko\n" + "liitu\n" + "permanenttitussi\n" + "hiiri\n" + "näppäimistö\n" + "oppitunti";
 		return changed;
 	}
 
 	private ArrayList<RapidnamingDatahelp> pictures(ArrayList<Integer> imageNumbers) {
 
 		ArrayList<RapidnamingDatahelp> lista = new ArrayList<>();
-
+		/*
+		 * - lisää kuvia tiedostoon Rapidnaming\Rapidnaming-stub\src\main\webapp\WEB-INF\images ja
+		 * nimeä ne järjestyksessä kuva0.png kuva1.png kuva2.png jne, jos kuvat ovat eri muodossa
+		 * kun png se pitää vaihtaa myös RapidnamingEditor getImage() methodista ja
+		 * RapidnamingDatahelp luokasta getPicture() methodista. Kun kuvat ovat tiedostossa liitä
+		 * niihin kysymykset ja vastaukset esimerkin mukaan RapidnamingEditor luokan pictures()
+		 * methodiin. Ensimmäinen argumentti on kuvan numero esim kuva1.png:n numero on 1. toinen on
+		 * kysymys joka kuvasta kysytään ja viimeinen on oikea vastaus. Samasta kuvasta voi olla
+		 * monia kysymyksiä. Loput esim kuvien määrän laskemisen koodi tekee itse.
+		 */
 		lista.add(new RapidnamingDatahelp(0, "Kuinka monta punaista palloa?", "4"));
 		lista.add(new RapidnamingDatahelp(0, "Kuinka monta vihreää palloa?", "3"));
 		lista.add(new RapidnamingDatahelp(1, "Kuinka monta punaista palloa?", "3"));
@@ -238,6 +209,7 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 		lista.add(new RapidnamingDatahelp(3, "Kuinka monta vihreää palloa?", "4"));
 		lista.add(new RapidnamingDatahelp(4, "Kuinka monta punaista palloa?", "4"));
 		lista.add(new RapidnamingDatahelp(4, "Kuinka monta vihreää palloa?", "6"));
+		lista.add(new RapidnamingDatahelp(5, "Mikä eläin on kuvassa?", "kissa"));
 
 		if (imageNumbers.isEmpty()) {
 			return lista;
@@ -254,7 +226,13 @@ public class RapidnamingEditor implements MathTabbedEditorWrap<RapidnamingData> 
 				}
 			}
 
-			return lista2;
+			// palauttaa koko listan jos vain 1 kuva on valittuna, jos valitsee vain yhden kuvan
+			// niin tehtävä ei toimi :/
+			if (lista2.size() <= 1) {
+				return lista;
+			} else {
+				return lista2;
+			}
 		}
 	}
 

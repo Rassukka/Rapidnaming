@@ -11,6 +11,7 @@ public class RapidnamingData implements ExerciseData {
 	private int numberOfQuestions;
 	private int timeShown;
 	private RapidnamingMode rapidnamingMode;
+	private Boolean isolla;
 
 	private String[] words;
 	private String[] sequence;
@@ -18,11 +19,12 @@ public class RapidnamingData implements ExerciseData {
 	private ArrayList<RapidnamingDatahelp> pictures;
 
 	// sanoille
-	public RapidnamingData(int questions, int timeShown, String[] words, RapidnamingMode rapidnamingMode) {
+	public RapidnamingData(int questions, int timeShown, String[] words, boolean isolla, RapidnamingMode rapidnamingMode) {
 		this.numberOfQuestions = questions;
 		this.timeShown = timeShown;
 		this.words = words;
 		this.sequence = getSequence(words);
+		this.isolla = isolla;
 		this.rapidnamingMode = rapidnamingMode;
 	}
 
@@ -52,6 +54,14 @@ public class RapidnamingData implements ExerciseData {
 
 	public void setTimeShown(int timeShown) {
 		this.timeShown = timeShown;
+	}
+
+	public Boolean getIsolla() {
+		return isolla;
+	}
+
+	public void setIsolla(Boolean isolla) {
+		this.isolla = isolla;
 	}
 
 	public String[] getWords() {
